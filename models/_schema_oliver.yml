@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: oliver_dim_customer
+    description: "Customer dimension (one row per CUSTOMER_ID)."
+  - name: oliver_dim_employee
+    description: "Employee dimension (one row per EMPLOYEE_ID)."
+  - name: oliver_dim_product
+    description: "Product dimension (one row per PRODUCT_ID)."
+  - name: oliver_dim_store
+    description: "Store dimension (one row per STORE_ID)."
+  - name: oliver_dim_date
+    description: "Date dimension for calendar attributes."
+  - name: fact_sales
+    description: "Sales fact at order-line grain, joining to customer, employee, product, store, and date."
