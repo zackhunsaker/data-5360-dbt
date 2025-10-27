@@ -2,10 +2,11 @@ version: 2
 
 sources:
   - name: insurance_landing
-    database: firstnamelastname
-    schema: insurance_dw_source
+    database: ZACKHUNSAKER
+    schema: INSURANCE_DW_SOURCE
     tables:
       - name: agents
       - name: claims
       - name: customers
       - name: policies
+      - name: customer_service_interactions
