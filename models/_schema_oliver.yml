@@ -2,25 +2,129 @@ version: 2
 
 models:
   - name: oliver_dim_customer
-    description: "Customer dimension (one row per CUSTOMER_ID)."
+    description: "Customer dimension (one row per CUSTOMER_KEY)."
+    columns:
+      - name: customer_key
+        description: "Primary key for the customer dimension."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Source system customer identifier."
 
   - name: oliver_dim_employee
-    description: "Employee dimension (one row per EMPLOYEE_ID)."
+    description: "Employee dimension (one row per EMPLOYEE_KEY)."
+    columns:
+      - name: employee_key
+        description: "Primary key for the employee dimension."
+        tests:
+          - unique
+          - not_null
+      - name: employee_id
+        description: "Source system employee identifier."
 
   - name: oliver_dim_product
-    description: "Product dimension (one row per PRODUCT_ID)."
+    description: "Product dimension (one row per PRODUCT_KEY)."
+    columns:
+      - name: product_key
+        description: "Primary key for the product dimension."
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: "Source system product identifier."
 
   - name: oliver_dim_store
-    description: "Store dimension (one row per STORE_ID)."
+    description: "Store dimension (one row per STORE_KEY)."
+    columns:
+      - name: store_key
+        description: "Primary key for the store dimension."
+        tests:
+          - unique
+          - not_null
+      - name: store_id
+        description: "Source system store identifier."
 
   - name: oliver_dim_date
     description: "Date dimension for calendar attributes."
+    columns:
+      - name: date_key
+        description: "Primary key for the date dimension."
+        tests:
+          - unique
+          - not_null
+      - name: date_day
+        description: "Calendar date field."
 
   - name: fact_sales
     description: "Sales fact at order-line grain, joining to customer, employee, product, store, and date."
+    columns:
+      - name: customer_key
+        description: "Foreign key to customer dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_customer')
+              field: customer_key
+      - name: employee_key
+        description: "Foreign key to employee dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_employee')
+              field: employee_key
+      - name: product_key
+        description: "Foreign key to product dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_product')
+              field: product_key
+      - name: store_key
+        description: "Foreign key to store dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_store')
+              field: store_key
+      - name: date_key
+        description: "Foreign key to date dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_date')
+              field: date_key
 
   - name: stg_employee_certifications
     description: "Staging model for employee certification data. Parses JSON from CERTIFICATION_JSON to extract certification details (name, cost, and awarded date) for each employee record."
+    columns:
+      - name: certification_name
+        description: "Type of certification awarded."
+        tests:
+          - accepted_values:
+              values:
+                - "Safety"
+                - "Technical"
+                - "Management"
+                - "Customer Service"
+                - "Cash Handling and Security"
+                - "Product Knowledge Level 2"
+                - "Point of Sale Operations"
+                - "Leadership and Coaching"
+                - "Strategic Retail Operations"
+                - "Conflict Resolution"
+                - "Inventory Management"
+                - "Customer Service Excellence"
+                - "Workplace Safety"
+
 
   - name: fact_certification
     description: "Certification fact table with one row per employee per certification awarded date. Joins to dim_employee and dim_date for analysis of certification completion trends and costs over time."
+    columns:
+      - name: employee_key
+        description: "Foreign key to employee dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_employee')
+              field: employee_key
+      - name: date_key
+        description: "Foreign key to date dimension."
+        tests:
+          - relationships:
+              to: ref('oliver_dim_date')
+              field: date_key
