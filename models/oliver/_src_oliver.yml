@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: oliver_landing
-    database: ELIMCFADDEN
+    database: ZACKHUNSAKER
     schema: oliver_dw_source   # change if your schema name differs
     tables:
       - name: customer
